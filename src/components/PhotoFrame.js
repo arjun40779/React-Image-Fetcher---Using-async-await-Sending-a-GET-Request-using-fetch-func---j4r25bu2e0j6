@@ -1,5 +1,5 @@
-import React from 'react';
+import React from "react";
 
-export const PhotoFrame = () => {
-   
-}
+export const PhotoFrame = (props) => {
+  return <img src={props.url} />;
+};
