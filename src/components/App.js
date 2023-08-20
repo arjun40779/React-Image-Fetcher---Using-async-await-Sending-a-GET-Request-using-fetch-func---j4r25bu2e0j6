@@ -28,9 +28,6 @@ const App = () => {
     if (photoId !== "") {
       fetchPhotoData(photoId);
     }
-    return () => {
-      setPhotoId("");
-    };
   }, [photoId]);
 
   return (
