@@ -1,46 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
+
 import "../styles/App.css";
+
 import { Loader } from "./Loader";
+
 import { PhotoFrame } from "./PhotoFrame";
-import { useState, useEffect } from "react";
+
 const App = () => {
-  const [photoId, setPhotoId] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [photoData, setPhotoData] = useState(null);
+  const [id, setId] = useState();
 
-  const fetchPhotoData = async (id) => {
-    setIsLoading(true);
+  const [loading, setLoading] = useState(false);
 
-    try {
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/photos/${id}`
-      );
-      const data = await response.json();
-      setPhotoData(data);
-    } catch (error) {
-      console.error("Error fetching photo:", error);
+  const [imgData, setImgData] = useState();
+
+  const handleNumberChange = (e) => {
+    const number = e.target.value;
+
+    async function fetchData(id) {
+      try {
+        setLoading(true);
+
+        const rawData = await fetch(
+          `https://jsonplaceholder.typicode.com/photos/${id}`
+        );
+
+        const data = await rawData.json();
+
+        setImgData(data);
+      } catch (error) {
+      } finally {
+        setLoading(false);
+      }
     }
 
-    setIsLoading(false);
+    setId(number);
+
+    fetchData(number);
   };
 
-  useEffect(() => {
-    if (photoId !== "") {
-      fetchPhotoData(photoId);
-    }
-  }, [photoId]);
-
   return (
-    <div>
-      <input
-        type="number"
-        placeholder="Enter a number between 1-5000"
-        onChange={(e) => setPhotoId(e.target.value)}
-      />
-      {isLoading ? <Loader /> : null}
-      {!isLoading && photoData && (
-        <PhotoFrame url={photoData.url} title={photoData.title} />
-      )}
+    <div id="main">
+      Id number&nbsp;
+      <input type={"number"} value={id} onChange={handleNumberChange} />
+      {loading ? (
+        <Loader />
+      ) : !loading && imgData && id !== 0 ? (
+        <PhotoFrame id={imgData.id} url={imgData.url} title={imgData.title} />
+      ) : null}
     </div>
   );
 };
