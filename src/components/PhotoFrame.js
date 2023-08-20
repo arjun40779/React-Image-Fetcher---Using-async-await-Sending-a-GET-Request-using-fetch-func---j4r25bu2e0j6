@@ -1,5 +1,5 @@
 import React from "react";
 
 export const PhotoFrame = (props) => {
-  return <img src={props.url} />;
+  return <img className="photoframe" src={props.url} />;
 };
